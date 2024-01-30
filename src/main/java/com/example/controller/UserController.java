@@ -1,11 +1,15 @@
-package com.example.login;
+package com.example.controller;
 
+import com.example.domain.user.User;
+import com.example.dto.UserDto;
+import com.example.service.UserServiceImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("user")
@@ -34,4 +38,16 @@ public class UserController {
     public List<User> findAll(){
         return userService.findUsers();
     }
+
+    @GetMapping("tutors")
+    public List<User> findTutors(String role){
+        return userService.findTutors(role);
+    }
+
+    //@PathVariable : 경로 변수
+    @GetMapping("tutors/{email}")
+    public Optional<User> findTutorsByEmail(@PathVariable String email){
+        return userService.findTutorByEmail(email);
+    }
+
 }

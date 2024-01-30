@@ -1,8 +1,9 @@
-package com.example.login;
+package com.example.service;
 
+import com.example.domain.user.User;
+import com.example.domain.user.UserRepository;
+import com.example.dto.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,10 @@ public class UserServiceImpl {
                     });
         }
     */
-    public Optional<User> findUserByUid(String uid) { return userRepository.findByUid(uid); }
+    //public Optional<User> findUserByUid(String uid) { return userRepository.findByUid(uid); }
 
     //email주소로 db에서 유저데이터 검색
-    public Optional<User> findUserByEmail(String email){
+    public Optional<User> findTutorByEmail(String email){
         return userRepository.findByEmail(email);
     }
 
@@ -39,5 +40,9 @@ public class UserServiceImpl {
         return userRepository.findAll();
     }
 
-    public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
+    public List<User> findTutors(String role){
+        return userRepository.findTutors(role);
+    }
+
+    //public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
 }
