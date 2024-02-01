@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -32,7 +31,7 @@ public class UserServiceImpl {
     //public Optional<User> findUserByUid(String uid) { return userRepository.findByUid(uid); }
 
     //email주소로 db에서 유저데이터 검색
-    public Optional<User> findTutorByEmail(String email){
+    public List<User> findTutorByEmail(String email){
         return userRepository.findByEmail(email);
     }
 

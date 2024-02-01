@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, String> {
 
     User save(User user);
 
@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // ?1 : 첫 번째 위치 기반 파라미터에 해당하는 값 지정
     @Query("select u from User u where u.role = 'tutor' and u.email = ?1")
-    Optional<User> findByEmail(String email);
+    List<User> findByEmail(String email);
 
     //@Query("select u.nickname from User u where u.uid = ?1")
     //String findNickName(String uid);
