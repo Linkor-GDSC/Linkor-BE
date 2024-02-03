@@ -61,4 +61,9 @@ public class UserController {
         return userService.findTutorByEmail(email);
     }
 
+    @GetMapping("tutors/time/{time}")
+    public List<User> findTutorsByTime(@PathVariable String time){
+        return userService.findTutorsByTime(time);
+    }
+
 }
