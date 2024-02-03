@@ -45,9 +45,17 @@ public class UserServiceImpl {
 
     //public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
 
+    /*
     //튜터 필터링
     public List<User> getUsersByFilter(String gender, String locationsido, String locationgu, String tutoringmethod) {
         return userRepository.findUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
+    }
+
+     */
+
+    public List<User> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
+                                               List<String> times) {
+        return userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
     }
 
     public List<User> findTutorsByTime(String time){
