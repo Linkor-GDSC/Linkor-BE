@@ -68,6 +68,18 @@ public class UserController {
     public List<User> findTutorsByEmail(@PathVariable String email){
         return userService.findTutorByEmail(email);
     }
+  
+    //tutor 필터링
+    @GetMapping("/user")
+    public List<User> getUsersByFilter(
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "locationsido", required = false) String locationsido,
+            @RequestParam(value = "locationgu", required = false) String locationgu,
+            @RequestParam(value = "tutoringmethod", required = false) String tutoringmethod) {
+
+        return userService.getUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
+    }
+    
 
     @GetMapping("tutors/time/{time}")
     public List<User> findTutorsByTime(@PathVariable String time){

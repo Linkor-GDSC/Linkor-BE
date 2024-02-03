@@ -21,6 +21,21 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("select u from User u where u.role = 'tutor'")
     List<User> findTutors(String role);
 
+
+    //Param 어노테이션을 사용하지 않는 경우
+    // 튜터 필터링
+    @Query("select u from User u where " +
+            "(:gender IS NULL OR u.gender = :gender) AND " +
+            "(:locationsido IS NULL OR u.locationsido = :locationsido) AND " +
+            "(:locationgu IS NULL OR u.locationgu = :locationgu) AND " +
+            "(:tutoringmethod IS NULL OR u.tutoringmethod = :tutoringmethod)")
+    List<User> findUsersByFilter(
+            String gender,
+            String locationsido,
+            String locationgu,
+            String tutoringmethod);
+
     @Query("select u from User u join Time t on u.email = t.user_email where u.role = 'tutor' and t.time = ?1")
     List<User> findTutorsByTime(String time);
+
 }

@@ -15,7 +15,7 @@ public class UserDto {
     private String gender;
     private String locationsido;
     private String locationgu;
-    private String tutoringMethod;
+    private String tutoringmethod;
     private String introduction;
 
 
@@ -27,7 +27,7 @@ public class UserDto {
                 .gender(gender)
                 .locationsido(locationsido)
                 .locationgu(locationgu)
-                .tutoringMethod(tutoringMethod)
+                .tutoringmethod(tutoringmethod)
                 .introduction(introduction)
                 .build();
     }

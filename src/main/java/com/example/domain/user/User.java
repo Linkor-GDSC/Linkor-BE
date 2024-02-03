@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class User {
 
     @Id
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "name")
@@ -31,21 +31,21 @@ public class User {
     private String locationgu;
 
     @Column(name = "tutoringmethod")
-    private String tutoringMethod;
+    private String tutoringmethod;
 
     @Column(name = "introduction")
     private String introduction;
 
     @Builder
     public User(String email, String name, String role, String gender, String locationsido,
-                String locationgu, String tutoringMethod, String introduction) {
+                String locationgu, String tutoringmethod, String introduction) {
         this.email = email;
         this.name = name;
         this.role = role;
         this.gender = gender;
         this.locationsido = locationsido;
         this.locationgu = locationgu;
-        this.tutoringMethod = tutoringMethod;
+        this.tutoringmethod = tutoringmethod;
         this.introduction = introduction;
     }
 }
