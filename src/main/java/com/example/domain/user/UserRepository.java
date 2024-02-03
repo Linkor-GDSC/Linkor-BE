@@ -15,8 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //Optional<User> findByUid(String uid);
 
     // ?1 : 첫 번째 위치 기반 파라미터에 해당하는 값 지정
-    @Query("select u from User u where u.role = 'tutor' and u.email = ?1")
-    Optional<User> findByEmail(String email);
+    //@Query("select u from User u where u.role = 'tutor' and u.email = ?1")
+    User findByEmail(String email);
 
     //@Query("select u.nickname from User u where u.uid = ?1")
     //String findNickName(String uid);
@@ -25,4 +25,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where u.role = 'tutor'")
     List<User> findTutors(String role);
+
+
+    //Param 어노테이션을 사용하지 않는 경우
+    // 튜터 필터링
+    @Query("select u from User u where " +
+            "(:gender IS NULL OR u.gender = :gender) AND " +
+            "(:locationsido IS NULL OR u.locationsido = :locationsido) AND " +
+            "(:locationgu IS NULL OR u.locationgu = :locationgu) AND " +
+            "(:tutoringmethod IS NULL OR u.tutoringmethod = :tutoringmethod)")
+    List<User> findUsersByFilter(
+            String gender,
+            String locationsido,
+            String locationgu,
+            String tutoringmethod);
 }

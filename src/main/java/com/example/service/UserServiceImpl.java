@@ -32,7 +32,7 @@ public class UserServiceImpl {
     //public Optional<User> findUserByUid(String uid) { return userRepository.findByUid(uid); }
 
     //email주소로 db에서 유저데이터 검색
-    public Optional<User> findTutorByEmail(String email){
+    public User findTutorByEmail(String email){
         return userRepository.findByEmail(email);
     }
 
@@ -45,4 +45,9 @@ public class UserServiceImpl {
     }
 
     //public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
+
+    //튜터 필터링
+    public List<User> getUsersByFilter(String gender, String locationsido, String locationgu, String tutoringmethod) {
+        return userRepository.findUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
+    }
 }

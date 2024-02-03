@@ -46,8 +46,19 @@ public class UserController {
 
     //@PathVariable : 경로 변수
     @GetMapping("tutors/{email}")
-    public Optional<User> findTutorsByEmail(@PathVariable String email){
+    public User findTutorsByEmail(@PathVariable String email){
         return userService.findTutorByEmail(email);
+    }
+
+    //tutor 필터링
+    @GetMapping("/user")
+    public List<User> getUsersByFilter(
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "locationsido", required = false) String locationsido,
+            @RequestParam(value = "locationgu", required = false) String locationgu,
+            @RequestParam(value = "tutoringmethod", required = false) String tutoringmethod) {
+
+        return userService.getUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
     }
 
 }
