@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.domain.request.TimeRequest;
 import com.example.domain.user.User;
 import com.example.dto.TimeDto;
 import com.example.dto.UserDto;
@@ -36,12 +37,19 @@ public class UserController {
 
     //time 저장
     @PostMapping("register/time")
-    public void register_time(@RequestBody TimeDto time){
-        try{
-            System.out.println(time.toString());
-            timeService.save(time);
-        }catch (DataIntegrityViolationException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 회원입니다.");
+    public void register_time(@RequestBody TimeRequest request) {
+        String email = request.getEmail();
+        List<String> times = request.getTimes();
+
+        for (String time : times) {
+            TimeDto timeDto = new TimeDto(time, email);
+
+            try {
+                System.out.println(timeDto.toString());
+                timeService.save(timeDto);
+            } catch (DataIntegrityViolationException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 회원입니다.");
+            }
         }
     }
     @GetMapping("all")

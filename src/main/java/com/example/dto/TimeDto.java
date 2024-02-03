@@ -11,6 +11,11 @@ public class TimeDto {
     private String time;
     private String user_email;
 
+    public TimeDto(String time, String user_email) {
+        this.time = time;
+        this.user_email = user_email;
+    }
+
     public Time toEntity() {
         return Time.builder()
                 .time(time)
