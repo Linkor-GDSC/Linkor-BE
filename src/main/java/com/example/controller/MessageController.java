@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/messages")
 public class MessageController {
 
     private final MessageService messageService;
@@ -19,7 +20,7 @@ public class MessageController {
 
     //쪽지 보내기
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/messages/{email}")
+    @PostMapping("/{email}")
     public Response<?> sendMessage(@RequestBody MessageDto messageDto, @PathVariable("email") String email) {
         User user = userRepository.findByEmail(email);
         messageDto.setSenderEmail(user.getEmail());
@@ -29,7 +30,7 @@ public class MessageController {
 
     //받은 쪽지 확인
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/messages/received/{email}")
+    @GetMapping("/received/{email}")
     public Response<?> getReceivedMessage(@PathVariable("email") String email) {
         User user = userRepository.findByEmail(email);
         return new Response<>("성공", "받은 쪽지를 불러왔습니다.", messageService.receivedMessage(user));
@@ -38,11 +39,21 @@ public class MessageController {
 
     //보낸 편지 확인
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/messages/sent/{email}")
+    @GetMapping("/sent/{email}")
     public Response<?> getSentMessage(@PathVariable("email") String email) {
         User user = userRepository.findByEmail(email);
 
         return new Response<>("성공", "보낸 쪽지를 불러왔습니다.", messageService.sentMessage(user));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{senderEmail}/{receiverEmail}")
+    public Response<?> getAllMessages(@PathVariable("senderEmail") String senderEmail,
+                                      @PathVariable("receiverEmail") String receiverEmail) {
+        User sender = userRepository.findByEmail(senderEmail);
+        User receiver = userRepository.findByEmail(receiverEmail);
+        return new Response<>("성공", "쪽지들을 불러왔습니다.", messageService.bothReceivedMessage(sender, receiver));
+    }
+
 
 }

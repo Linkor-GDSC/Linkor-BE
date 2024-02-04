@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -61,6 +62,29 @@ public class MessageService {
         for(Message message : messages) {
             messageDtos.add(MessageDto.toDto(message));
         }
+        return messageDtos;
+    }
+
+    //두 유저간 주고받은 쪽지들 불러오기
+    @Transactional(readOnly = true)
+    public List<MessageDto> bothReceivedMessage(User sender, User receiver) {
+        List<Message> senderSentMessages = messageRepository.findAllBySender(sender);
+        List<Message> senderReceivedMessages = messageRepository.findAllByReceiver(sender);
+        List<Message> receiverSentMessages = messageRepository.findAllBySender(receiver);
+        List<Message> receiverReceivedMessages = messageRepository.findAllByReceiver(receiver);
+
+        List<MessageDto> messageDtos = new ArrayList<>();
+        for (Message message : senderSentMessages) {
+            if (receiverReceivedMessages.contains(message))
+                messageDtos.add(MessageDto.toDto(message));
+        }
+        for (Message message : senderReceivedMessages) {
+            if (receiverSentMessages.contains(message))
+                messageDtos.add(MessageDto.toDto(message));
+        }
+        // regDate를 기준으로 시간순으로 정렬
+        messageDtos.sort(Comparator.comparing(MessageDto::getRegDate));
+
         return messageDtos;
     }
 }
