@@ -10,6 +10,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User save(User user);
 
+    //이메일로 회원가입된 회원인지 중복체크
+    boolean existsByEmail(String email);
 
     // ?1 : 첫 번째 위치 기반 파라미터에 해당하는 값 지정
     @Query("select u from User u where u.role = 'tutor' and u.email = ?1")
