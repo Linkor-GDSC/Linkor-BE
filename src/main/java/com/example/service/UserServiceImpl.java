@@ -44,8 +44,10 @@ public class UserServiceImpl {
     }
 
     //email주소로 db에서 유저데이터 검색
-    public List<User> findTutorByEmail(String email){
-        return userRepository.findByEmail(email);
+    public UserAndTimeDto findTutorByEmail(String email){
+        User user =  userRepository.findByEmail(email);
+        List<Time> times = timeRepository.findTimesByUserEmail(email);
+        return new UserAndTimeDto(user, times);
     }
 
     public List<User> findUsers(){

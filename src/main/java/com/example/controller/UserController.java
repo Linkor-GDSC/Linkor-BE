@@ -94,7 +94,7 @@ public class UserController {
 
     //@PathVariable : 경로 변수
     @GetMapping("tutors/{email}")
-    public List<User> findTutorsByEmail(@PathVariable String email){
+    public UserAndTimeDto findTutorByEmail(@PathVariable String email){
         return userService.findTutorByEmail(email);
     }
   /*
