@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -45,7 +44,7 @@ public class UserServiceImpl {
 
     //email주소로 db에서 유저데이터 검색
     public UserAndTimeDto findTutorByEmail(String email){
-        User user =  userRepository.findByEmail(email);
+        User user =  userRepository.findTutorByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
         return new UserAndTimeDto(user, times);
     }
@@ -71,14 +70,13 @@ public class UserServiceImpl {
 
     public List<UserAndTimeDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
                                                List<String> times) {
-        //return userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
         // 사용자 필터링된 목록 가져오기
         List<Object[]> usersAndTimes = userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
 
         // 사용자 이메일 목록 추출
         List<String> userEmails = usersAndTimes.stream()
                 .map(userAndTime -> ((User) userAndTime[0]).getEmail())
-                .collect(Collectors.toList());
+                .toList();
 
         // 각 사용자에 대한 시간 정보 가져오기
         Map<String, List<Time>> userEmailToTimesMap = new HashMap<>();
