@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.domain.request.TimeRequest;
 import com.example.domain.user.User;
 import com.example.dto.TimeDto;
+import com.example.dto.UserAndTimeDto;
 import com.example.dto.UserDto;
 import com.example.service.TimeServiceImpl;
 import com.example.service.UserServiceImpl;
@@ -96,7 +97,7 @@ public class UserController {
     public List<User> findTutorsByEmail(@PathVariable String email){
         return userService.findTutorByEmail(email);
     }
-  
+  /*
     //tutor 필터링
     @GetMapping("/user")
     public List<User> getUsersByFilter(
@@ -107,7 +108,19 @@ public class UserController {
 
         return userService.getUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
     }
-    
+
+   */
+
+    @GetMapping("/filter")
+    public List<UserAndTimeDto> getUsersByFilterWithTime(
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "locationsido", required = false) String locationsido,
+            @RequestParam(value = "locationgu", required = false) String locationgu,
+            @RequestParam(value = "tutoringmethod", required = false) String tutoringmethod,
+            @RequestParam(value = "times", required = false) List<String> times) {
+
+        return userService.getUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
+    }
 
     @GetMapping("tutors/time/{time}")
     public List<User> findTutorsByTime(@PathVariable String time){
