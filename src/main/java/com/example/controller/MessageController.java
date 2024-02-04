@@ -5,9 +5,12 @@ import com.example.domain.user.UserRepository;
 import com.example.dto.MessageDto;
 import com.example.response.Response;
 import com.example.service.MessageService;
+import com.example.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
 
     private final MessageService messageService;
+    private final UserServiceImpl userService;
     private final UserRepository userRepository;
 
     //쪽지 보내기
@@ -46,6 +50,7 @@ public class MessageController {
         return new Response<>("성공", "보낸 쪽지를 불러왔습니다.", messageService.sentMessage(user));
     }
 
+    //일대일 대화 목록
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{senderEmail}/{receiverEmail}")
     public Response<?> getAllMessages(@PathVariable("senderEmail") String senderEmail,
@@ -53,6 +58,13 @@ public class MessageController {
         User sender = userRepository.findByEmail(senderEmail);
         User receiver = userRepository.findByEmail(receiverEmail);
         return new Response<>("성공", "쪽지들을 불러왔습니다.", messageService.bothReceivedMessage(sender, receiver));
+    }
+
+    //내 쪽지 대상들 불러오기
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("userlist/{email}")
+    public List<Object[]> getMessageUserLists(@PathVariable("email") String email) {
+        return userService.getMessageUserLists(email);
     }
 
 

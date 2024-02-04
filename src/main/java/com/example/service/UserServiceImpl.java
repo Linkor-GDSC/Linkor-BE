@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.domain.message.Message;
+import com.example.domain.message.MessageRepository;
 import com.example.domain.time.Time;
 import com.example.domain.time.TimeRepository;
 import com.example.domain.user.User;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class UserServiceImpl {
     private final UserRepository userRepository;
     private final TimeRepository timeRepository;
+    private final MessageRepository messageRepository;
 
     //user데이터 DB에 저장
     public void join(UserDto userDto){
@@ -98,5 +101,20 @@ public class UserServiceImpl {
 
     public List<User> findTutorsByTime(String time){
         return userRepository.findTutorsByTime(time);
+    }
+
+    public List<Object[]> getMessageUserLists(String email) {
+        User user = userRepository.findByEmail(email);
+        List<Object[]> users = new ArrayList<>();
+        switch (user.getRole()) {
+            case "tutor" -> {
+                users = messageRepository.findSenders(user);
+
+            }
+            case "student" -> {
+                users = messageRepository.findReceivers(user);
+            }
+        }
+        return users;
     }
 }

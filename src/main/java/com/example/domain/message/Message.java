@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Data
+@Table(name = "MESSAGE")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
