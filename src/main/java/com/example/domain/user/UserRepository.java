@@ -38,13 +38,13 @@ public interface UserRepository extends JpaRepository<User, String> {
  */
 
     //튜터 필터링 - 시간까지
-    @Query("select distinct u from User u join Time t on u.email = t.user_email where" +
+    @Query("select u from User u join Time t on u.email = t.user_email where" +
             "(:gender IS NULL OR u.gender = :gender) AND " +
             "(:locationsido IS NULL OR u.locationsido = :locationsido) AND " +
             "(:locationgu IS NULL OR u.locationgu = :locationgu) AND " +
             "(:tutoringmethod IS NULL OR u.tutoringmethod = :tutoringmethod) AND " +
             "(:times IS NULL OR t.time in :times)")
-    List<User> findUsersByFilterWithTime(String gender,
+    List<Object[]> findUsersByFilterWithTime(String gender,
                                          String locationsido,
                                          String locationgu,
                                          String tutoringmethod,

@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.domain.request.TimeRequest;
 import com.example.domain.user.User;
 import com.example.dto.TimeDto;
+import com.example.dto.UserAndTimeDto;
 import com.example.dto.UserDto;
 import com.example.service.TimeServiceImpl;
 import com.example.service.UserServiceImpl;
@@ -83,7 +84,7 @@ public class UserController {
    */
 
     @GetMapping("/filter")
-    public List<User> getUsersByFilterWithTime(
+    public List<UserAndTimeDto> getUsersByFilterWithTime(
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "locationsido", required = false) String locationsido,
             @RequestParam(value = "locationgu", required = false) String locationgu,
