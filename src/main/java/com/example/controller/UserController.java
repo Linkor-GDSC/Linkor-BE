@@ -8,6 +8,10 @@ import com.example.service.TimeServiceImpl;
 import com.example.service.UserServiceImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,16 +28,40 @@ public class UserController {
         this.userService = userService;
         this.timeService = timeService;
     }
+//    @PostMapping("register")
+//    //@ApiOperation(value = "유저 회원등록", notes = "유저 정보를 입력받아 회원등록을 하고, 이미 등록된 유저이면 등록하지 않는다.")
+//    public void register(@RequestBody UserDto user){
+//        try{
+//            System.out.println(user.toString());
+//            userService.join(user);
+//        }catch (DataIntegrityViolationException e){
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 회원입니다.");
+//        }
+//    }
+
     @PostMapping("register")
-    //@ApiOperation(value = "유저 회원등록", notes = "유저 정보를 입력받아 회원등록을 하고, 이미 등록된 유저이면 등록하지 않는다.")
-    public void register(@RequestBody UserDto user){
+    public boolean register(@RequestBody UserDto user){
         try{
-            System.out.println(user.toString());
-            userService.join(user);
+            if (userService.checkUserDuplicate(user.getEmail())){
+                //bindingResult.addError(new FieldError("SignUp Request", "email", "이미 등록된 회원입니다."));
+                return true;
+            }else{
+                System.out.println(user.toString());
+                userService.join(user);
+                return false;
+            }
         }catch (DataIntegrityViolationException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 회원입니다.");
         }
     }
+
+
+    //회원가입시 이미 가입한 회원인지 중복체크
+    @GetMapping("register/{email}/exists")
+    public ResponseEntity<Boolean> checkMemberDuplicate(@PathVariable String email){
+        return ResponseEntity.ok(userService.checkUserDuplicate(email));
+    }
+
 
     //time 저장
     @PostMapping("register/time")

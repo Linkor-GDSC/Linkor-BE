@@ -29,6 +29,12 @@ public class UserServiceImpl {
         }
     */
 
+
+    //이메일로 이미 가입된 회원인지 판별
+    public boolean checkUserDuplicate(String email){
+        return userRepository.existsByEmail(email);
+    }
+
     //email주소로 db에서 유저데이터 검색
     public List<User> findTutorByEmail(String email){
         return userRepository.findByEmail(email);
