@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.domain.message.Message;
+import com.example.domain.message.MessageRepository;
 import com.example.domain.time.Time;
 import com.example.domain.time.TimeRepository;
 import com.example.domain.user.User;
@@ -14,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl {
     private final UserRepository userRepository;
     private final TimeRepository timeRepository;
+    private final MessageRepository messageRepository;
 
     //user데이터 DB에 저장
     public void join(UserDto userDto){
@@ -45,7 +47,7 @@ public class UserServiceImpl {
 
     //email주소로 db에서 유저데이터 검색
     public UserAndTimeDto findTutorByEmail(String email){
-        User user =  userRepository.findByEmail(email);
+        User user =  userRepository.findTutorByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
         return new UserAndTimeDto(user, times);
     }
@@ -71,14 +73,13 @@ public class UserServiceImpl {
 
     public List<UserAndTimeDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
                                                List<String> times) {
-        //return userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
         // 사용자 필터링된 목록 가져오기
         List<Object[]> usersAndTimes = userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
 
         // 사용자 이메일 목록 추출
         List<String> userEmails = usersAndTimes.stream()
                 .map(userAndTime -> ((User) userAndTime[0]).getEmail())
-                .collect(Collectors.toList());
+                .toList();
 
         // 각 사용자에 대한 시간 정보 가져오기
         Map<String, List<Time>> userEmailToTimesMap = new HashMap<>();
@@ -100,5 +101,20 @@ public class UserServiceImpl {
 
     public List<User> findTutorsByTime(String time){
         return userRepository.findTutorsByTime(time);
+    }
+
+    public List<Object[]> getMessageUserLists(String email) {
+        User user = userRepository.findByEmail(email);
+        List<Object[]> users = new ArrayList<>();
+        switch (user.getRole()) {
+            case "tutor" -> {
+                users = messageRepository.findSenders(user);
+
+            }
+            case "student" -> {
+                users = messageRepository.findReceivers(user);
+            }
+        }
+        return users;
     }
 }

@@ -15,8 +15,10 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     // ?1 : 첫 번째 위치 기반 파라미터에 해당하는 값 지정
     @Query("select u from User u where u.role = 'tutor' and u.email = ?1")
-    User findByEmail(String email);
+    User findTutorByEmail(String email);
 
+    @Query("select u from User u where u.email = ?1")
+    User findByEmail(String email);
 
     List<User> findAll();
 
