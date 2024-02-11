@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.domain.message.Message;
 import com.example.domain.message.MessageRepository;
 import com.example.domain.time.Time;
 import com.example.domain.time.TimeRepository;
@@ -12,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Transactional
@@ -111,5 +107,13 @@ public class UserServiceImpl {
             }
         }
         return users;
+    }
+
+    public void updateUserIntro(String email, String introduction) {
+        User user = userRepository.findByEmail(email);
+        user.setIntroduction(introduction);
+
+        // 유저 정보를 저장합니다.
+        userRepository.save(user);
     }
 }

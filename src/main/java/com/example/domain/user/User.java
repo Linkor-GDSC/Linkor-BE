@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 
 @Getter
+@Setter
 @Table(name = "USER")
 @NoArgsConstructor
 @Entity

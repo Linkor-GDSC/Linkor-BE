@@ -71,7 +71,6 @@ public class UserController {
             TimeDto timeDto = new TimeDto(time, email);
 
             try {
-                System.out.println(timeDto.toString());
                 timeService.save(timeDto);
             } catch (DataIntegrityViolationException e) {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 회원입니다.");
@@ -130,4 +129,10 @@ public class UserController {
         return userService.findUserByEmail(email);
     }
 
+    @PatchMapping("/updateIntro")
+    public void updateUserIntro(
+            @RequestParam(value = "email") String email,
+            @RequestParam(value = "intro") String introduction) {
+        userService.updateUserIntro(email, introduction);
+    }
 }
