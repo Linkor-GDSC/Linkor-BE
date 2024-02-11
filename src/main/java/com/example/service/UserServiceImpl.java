@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.domain.message.Message;
 import com.example.domain.message.MessageRepository;
 import com.example.domain.time.Time;
 import com.example.domain.time.TimeRepository;
@@ -12,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Transactional
@@ -45,9 +41,16 @@ public class UserServiceImpl {
         return userRepository.existsByEmail(email);
     }
 
-    //email주소로 db에서 유저데이터 검색
+    //email주소로 db에서 튜터데이터 검색
     public UserAndTimeDto findTutorByEmail(String email){
         User user =  userRepository.findTutorByEmail(email);
+        List<Time> times = timeRepository.findTimesByUserEmail(email);
+        return new UserAndTimeDto(user, times);
+    }
+
+    //email주소로 db에서 유저데이터 검색
+    public UserAndTimeDto findUserByEmail(String email){
+        User user =  userRepository.findByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
         return new UserAndTimeDto(user, times);
     }
@@ -59,17 +62,6 @@ public class UserServiceImpl {
     public List<User> findTutors(String role){
         return userRepository.findTutors(role);
     }
-
-
-    //public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
-
-    /*
-    //튜터 필터링
-    public List<User> getUsersByFilter(String gender, String locationsido, String locationgu, String tutoringmethod) {
-        return userRepository.findUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
-    }
-
-     */
 
     public List<UserAndTimeDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
                                                List<String> times) {
@@ -109,12 +101,19 @@ public class UserServiceImpl {
         switch (user.getRole()) {
             case "tutor" -> {
                 users = messageRepository.findSenders(user);
-
             }
             case "student" -> {
                 users = messageRepository.findReceivers(user);
             }
         }
         return users;
+    }
+
+    public void updateUserIntro(String email, String introduction) {
+        User user = userRepository.findByEmail(email);
+        user.setIntroduction(introduction);
+
+        // 유저 정보를 저장합니다.
+        userRepository.save(user);
     }
 }
