@@ -45,9 +45,16 @@ public class UserServiceImpl {
         return userRepository.existsByEmail(email);
     }
 
-    //email주소로 db에서 유저데이터 검색
+    //email주소로 db에서 튜터데이터 검색
     public UserAndTimeDto findTutorByEmail(String email){
         User user =  userRepository.findTutorByEmail(email);
+        List<Time> times = timeRepository.findTimesByUserEmail(email);
+        return new UserAndTimeDto(user, times);
+    }
+
+    //email주소로 db에서 유저데이터 검색
+    public UserAndTimeDto findUserByEmail(String email){
+        User user =  userRepository.findByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
         return new UserAndTimeDto(user, times);
     }
@@ -59,17 +66,6 @@ public class UserServiceImpl {
     public List<User> findTutors(String role){
         return userRepository.findTutors(role);
     }
-
-
-    //public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
-
-    /*
-    //튜터 필터링
-    public List<User> getUsersByFilter(String gender, String locationsido, String locationgu, String tutoringmethod) {
-        return userRepository.findUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
-    }
-
-     */
 
     public List<UserAndTimeDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
                                                List<String> times) {
@@ -109,7 +105,6 @@ public class UserServiceImpl {
         switch (user.getRole()) {
             case "tutor" -> {
                 users = messageRepository.findSenders(user);
-
             }
             case "student" -> {
                 users = messageRepository.findReceivers(user);

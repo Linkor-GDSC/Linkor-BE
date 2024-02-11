@@ -10,9 +10,6 @@ import com.example.service.UserServiceImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -125,6 +122,12 @@ public class UserController {
     @GetMapping("tutors/time/{time}")
     public List<User> findTutorsByTime(@PathVariable String time){
         return userService.findTutorsByTime(time);
+    }
+
+    //유저 정보 검색
+    @GetMapping("/{email}")
+    public UserAndTimeDto findUserByEmail(@PathVariable String email){
+        return userService.findUserByEmail(email);
     }
 
 }
