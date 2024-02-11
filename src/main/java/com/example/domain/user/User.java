@@ -36,9 +36,12 @@ public class User {
     @Column(name = "introduction")
     private String introduction;
 
+    @Column(name = "photourl")
+    private String photourl;
+
     @Builder
     public User(String email, String name, String role, String gender, String locationsido,
-                String locationgu, String tutoringmethod, String introduction) {
+                String locationgu, String tutoringmethod, String introduction, String photourl) {
         this.email = email;
         this.name = name;
         this.role = role;
@@ -47,5 +50,6 @@ public class User {
         this.locationgu = locationgu;
         this.tutoringmethod = tutoringmethod;
         this.introduction = introduction;
+        this.photourl = photourl;
     }
 }
