@@ -17,6 +17,7 @@ public class UserDto {
     private String locationgu;
     private String tutoringmethod;
     private String introduction;
+    private String photourl;
 
 
     public User toEntity(){
@@ -29,6 +30,7 @@ public class UserDto {
                 .locationgu(locationgu)
                 .tutoringmethod(tutoringmethod)
                 .introduction(introduction)
+                .photourl(photourl)
                 .build();
     }
 

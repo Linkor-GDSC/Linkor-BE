@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.domain.message.MessageRepository;
 import com.example.domain.time.Time;
 import com.example.domain.time.TimeRepository;
 import com.example.domain.user.User;
@@ -10,11 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +19,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl {
     private final UserRepository userRepository;
     private final TimeRepository timeRepository;
+    private final MessageRepository messageRepository;
 
     //user데이터 DB에 저장
     public void join(UserDto userDto){
@@ -43,8 +41,15 @@ public class UserServiceImpl {
         return userRepository.existsByEmail(email);
     }
 
-    //email주소로 db에서 유저데이터 검색
+    //email주소로 db에서 튜터데이터 검색
     public UserAndTimeDto findTutorByEmail(String email){
+        User user =  userRepository.findTutorByEmail(email);
+        List<Time> times = timeRepository.findTimesByUserEmail(email);
+        return new UserAndTimeDto(user, times);
+    }
+
+    //email주소로 db에서 유저데이터 검색
+    public UserAndTimeDto findUserByEmail(String email){
         User user =  userRepository.findByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
         return new UserAndTimeDto(user, times);
@@ -58,27 +63,15 @@ public class UserServiceImpl {
         return userRepository.findTutors(role);
     }
 
-
-    //public String findUserNickName(String uid) { return userRepository.findNickName(uid); }
-
-    /*
-    //튜터 필터링
-    public List<User> getUsersByFilter(String gender, String locationsido, String locationgu, String tutoringmethod) {
-        return userRepository.findUsersByFilter(gender, locationsido, locationgu, tutoringmethod);
-    }
-
-     */
-
     public List<UserAndTimeDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
                                                List<String> times) {
-        //return userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
         // 사용자 필터링된 목록 가져오기
         List<Object[]> usersAndTimes = userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
 
         // 사용자 이메일 목록 추출
         List<String> userEmails = usersAndTimes.stream()
                 .map(userAndTime -> ((User) userAndTime[0]).getEmail())
-                .collect(Collectors.toList());
+                .toList();
 
         // 각 사용자에 대한 시간 정보 가져오기
         Map<String, List<Time>> userEmailToTimesMap = new HashMap<>();
@@ -100,5 +93,27 @@ public class UserServiceImpl {
 
     public List<User> findTutorsByTime(String time){
         return userRepository.findTutorsByTime(time);
+    }
+
+    public List<Object[]> getMessageUserLists(String email) {
+        User user = userRepository.findByEmail(email);
+        List<Object[]> users = new ArrayList<>();
+        switch (user.getRole()) {
+            case "tutor" -> {
+                users = messageRepository.findSenders(user);
+            }
+            case "student" -> {
+                users = messageRepository.findReceivers(user);
+            }
+        }
+        return users;
+    }
+
+    public void updateUserIntro(String email, String introduction) {
+        User user = userRepository.findByEmail(email);
+        user.setIntroduction(introduction);
+
+        // 유저 정보를 저장합니다.
+        userRepository.save(user);
     }
 }
