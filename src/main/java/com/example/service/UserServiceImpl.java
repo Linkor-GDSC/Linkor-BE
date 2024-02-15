@@ -116,4 +116,34 @@ public class UserServiceImpl {
         // 유저 정보를 저장합니다.
         userRepository.save(user);
     }
+
+    //마이페이지에서 정보를 수정
+    public void editMypage(String email, UserDto userDto){
+        User user = userRepository.findByEmail(email);
+
+        if (user != null) {
+            user.updateMypage(userDto.getGender(), userDto.getLocationsido(),
+                    userDto.getLocationgu(), userDto.getTutoringmethod(),
+                    userDto.getIntroduction());
+
+            userRepository.save(user);
+        } else {
+            System.out.println("이메일에 해당하는 사용자를 찾을 수 없습니다: " + email);
+        }
+    }
+
+    /*
+    //마이페이지에서 time 제외하고 기본 정보만
+    public UserDto getUserByEmail(String email){
+        User user =  userRepository.findByEmail(email);
+
+        UserDto userDto = new UserDto();
+        userDto.setGender(user.getGender());
+        userDto.setLocationsido(user.getLocationsido());
+        userDto.setLocationgu(user.getLocationgu());
+        userDto.setTutoringmethod(user.getTutoringmethod());
+        userDto.setIntroduction(user.getIntroduction());
+        return userDto;
+    }
+    */
 }

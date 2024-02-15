@@ -53,4 +53,13 @@ public class User {
         this.introduction = introduction;
         this.photourl = photourl;
     }
+
+    //마이페이지 업데이트
+    public void updateMypage(String gender, String locationsido, String locationgu, String tutoringmethod, String introduction){
+        this.gender = gender;
+        this.locationsido = locationsido;
+        this.locationgu =locationgu;
+        this.tutoringmethod = tutoringmethod;
+        this.introduction = introduction;
+    }
 }
