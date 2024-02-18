@@ -19,7 +19,7 @@ public class CommentDto {
         return new CommentDto(
                 comment.getId(),
                 comment.getContent(),
-                comment.getUser().getEmail(),
+                comment.getUser().getName(),
                 comment.getUser().getPhotourl()
         );
     }
