@@ -24,7 +24,7 @@ public class BoardDto {
                 board.getId(),
                 board.getTitle(),
                 board.getContent(),
-                board.getUser().getEmail(),
+                board.getUser().getName(),
                 board.getUser().getPhotourl(),
                 board.getCreatedAt());
     }
