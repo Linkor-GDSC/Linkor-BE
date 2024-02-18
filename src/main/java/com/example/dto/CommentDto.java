@@ -13,12 +13,14 @@ public class CommentDto {
     private int id;
     private String content;
     private String writer;
+    private String writerPhotoUrl;
 
     public static CommentDto toDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
                 comment.getContent(),
-                comment.getUser().getEmail()
+                comment.getUser().getEmail(),
+                comment.getUser().getPhotourl()
         );
     }
 }

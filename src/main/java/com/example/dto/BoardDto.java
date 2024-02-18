@@ -16,6 +16,7 @@ public class BoardDto {
     private String title;
     private String content;
     private String writer;
+    private String writerPhotoUrl;
     private LocalDateTime createdAt;
 
     public static BoardDto toDto(Board board) {
@@ -24,6 +25,7 @@ public class BoardDto {
                 board.getTitle(),
                 board.getContent(),
                 board.getUser().getEmail(),
+                board.getUser().getPhotourl(),
                 board.getCreatedAt());
     }
 
