@@ -5,7 +5,7 @@ import com.example.domain.time.Time;
 import com.example.domain.time.TimeRepository;
 import com.example.domain.user.User;
 import com.example.domain.user.UserRepository;
-import com.example.dto.UserAndTimeDto;
+import com.example.dto.UserAndTimeReturnDto;
 import com.example.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,17 +42,31 @@ public class UserServiceImpl {
     }
 
     //email주소로 db에서 튜터데이터 검색
-    public UserAndTimeDto findTutorByEmail(String email){
+    public UserAndTimeReturnDto findTutorByEmail(String email){
         User user =  userRepository.findTutorByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
-        return new UserAndTimeDto(user, times);
+        // 결과 조합
+        List<String> return_times = new ArrayList<>();
+        for (Time time : times) {
+            return_times.add(time.getTime());
+        }
+        return new UserAndTimeReturnDto(user.getEmail(), user.getName(),
+                user.getRole(), user.getGender(), user.getLocationsido(), user.getLocationgu(), user.getTutoringmethod(),
+                user.getIntroduction(), user.getPhotourl(), return_times);
     }
 
     //email주소로 db에서 유저데이터 검색
-    public UserAndTimeDto findUserByEmail(String email){
+    public UserAndTimeReturnDto findUserByEmail(String email){
         User user =  userRepository.findByEmail(email);
         List<Time> times = timeRepository.findTimesByUserEmail(email);
-        return new UserAndTimeDto(user, times);
+        // 결과 조합
+        List<String> return_times = new ArrayList<>();
+        for (Time time : times) {
+            return_times.add(time.getTime());
+        }
+        return new UserAndTimeReturnDto(user.getEmail(), user.getName(),
+                user.getRole(), user.getGender(), user.getLocationsido(), user.getLocationgu(), user.getTutoringmethod(),
+                user.getIntroduction(), user.getPhotourl(), return_times);
     }
 
     public List<User> findUsers(){
@@ -63,7 +77,7 @@ public class UserServiceImpl {
         return userRepository.findTutors(role);
     }
 
-    public List<UserAndTimeDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
+    public List<UserAndTimeReturnDto> getUsersByFilterWithTime(String gender, String locationsido, String locationgu, String tutoringmethod,
                                                List<String> times) {
         // 사용자 필터링된 목록 가져오기
         List<Object[]> usersAndTimes = userRepository.findUsersByFilterWithTime(gender, locationsido, locationgu, tutoringmethod, times);
@@ -81,12 +95,18 @@ public class UserServiceImpl {
         }
 
         // 결과 조합
-        List<UserAndTimeDto> result = new ArrayList<>();
+        List<UserAndTimeReturnDto> result = new ArrayList<>();
         for (Object[] userAndTime : usersAndTimes) {
             User user = (User) userAndTime[0];
             List<Time> times2 = userEmailToTimesMap.get(user.getEmail());
-            UserAndTimeDto userAndTimeDto = new UserAndTimeDto(user, times2);
-            result.add(userAndTimeDto);
+            List<String> return_times = new ArrayList<>();
+            for (Time time : times2) {
+                return_times.add(time.getTime());
+            }
+            UserAndTimeReturnDto userAndTimeReturnDto = new UserAndTimeReturnDto(user.getEmail(), user.getName(),
+                    user.getRole(), user.getGender(), user.getLocationsido(), user.getLocationgu(), user.getTutoringmethod(),
+                    user.getIntroduction(), user.getPhotourl(), return_times);
+            result.add(userAndTimeReturnDto);
         }
         return result;
     }
