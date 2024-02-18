@@ -8,6 +8,7 @@ class LinkorApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
