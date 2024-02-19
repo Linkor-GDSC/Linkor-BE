@@ -47,7 +47,8 @@ public interface UserRepository extends JpaRepository<User, String> {
             "(:locationsido IS NULL OR u.locationsido = :locationsido) AND " +
             "(:locationgu IS NULL OR u.locationgu = :locationgu) AND " +
             "(:tutoringmethod IS NULL OR u.tutoringmethod = :tutoringmethod) AND " +
-            "(:times IS NULL OR t.time in :times)")
+            "(:times IS NULL OR t.time in :times) AND " +
+            "u.role = 'tutor'")
     List<Object[]> findUsersByFilterWithTime(String gender,
                                          String locationsido,
                                          String locationgu,
