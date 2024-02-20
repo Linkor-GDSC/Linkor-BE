@@ -16,7 +16,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class UserServiceImpl {
+public class UserService {
     private final UserRepository userRepository;
     private final TimeRepository timeRepository;
     private final MessageRepository messageRepository;

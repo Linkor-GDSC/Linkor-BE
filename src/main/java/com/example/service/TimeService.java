@@ -7,12 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class TimeServiceImpl {
+public class TimeService {
     private final TimeRepository timeRepository;
     private final UserRepository userRepository;
 

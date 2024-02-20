@@ -5,7 +5,7 @@ import com.example.domain.user.UserRepository;
 import com.example.dto.MessageDto;
 import com.example.response.Response;
 import com.example.service.MessageService;
-import com.example.service.UserServiceImpl;
+import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MessageController {
 
     private final MessageService messageService;
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final UserRepository userRepository;
 
     //쪽지 보내기
