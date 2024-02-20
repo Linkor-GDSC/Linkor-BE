@@ -4,8 +4,8 @@ import com.example.domain.request.TimeRequest;
 import com.example.dto.TimeDto;
 import com.example.dto.UserDto;
 import com.example.response.Response;
-import com.example.service.TimeServiceImpl;
-import com.example.service.UserServiceImpl;
+import com.example.service.TimeService;
+import com.example.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ import java.util.List;
 @RequestMapping("user")
 public class UserController {
 
-    private final UserServiceImpl userService;
-    private final TimeServiceImpl timeService;
+    private final UserService userService;
+    private final TimeService timeService;
 
-    public UserController(UserServiceImpl userService, TimeServiceImpl timeService) {
+    public UserController(UserService userService, TimeService timeService) {
         this.userService = userService;
         this.timeService = timeService;
     }
@@ -55,18 +55,15 @@ public class UserController {
     public Response register_time(@RequestBody TimeRequest request) {
         String email = request.getEmail();
         List<String> times = request.getTimes();
-
+        try {
         for (String time : times) {
             TimeDto timeDto = new TimeDto(time, email);
-
-            try {
-                timeService.save(timeDto);
-                return new Response("성공", "요일 저장 성공", null);
-            } catch (DataIntegrityViolationException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 시간입니다.");
-            }
+            timeService.save(timeDto);
         }
-        return null;
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 시간입니다.");
+        }
+        return new Response("성공", "요일 저장 성공", null);
     }
 
 //    @GetMapping("all")
@@ -160,18 +157,15 @@ public class UserController {
     public Response addMypageTime(@RequestBody TimeRequest request) {
         String email = request.getEmail();
         List<String> times = request.getTimes();
-
-        for (String time : times) {
-            TimeDto timeDto = new TimeDto(time, email);
-
-            try {
+        try {
+            for (String time : times) {
+                TimeDto timeDto = new TimeDto(time, email);
                 timeService.save(timeDto);
-                return new Response("성공", "요일 저장 성공", null);
-            } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 저장된 요일입니다.");
             }
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 저장된 요일입니다.");
         }
-        return null;
+        return new Response("성공", "요일 저장 성공", null);
     }
 
     //마이페이지에서 요일 삭제
@@ -179,9 +173,13 @@ public class UserController {
     public Response deleteMypageTime(@RequestBody TimeRequest request) {
         String email = request.getEmail();
         List<String> times = request.getTimes();
-        String onetime = times.get(0);
-
-        timeService.deleteByEmailAndTime(email, onetime);
+        try {
+            for (String time : times) {
+                timeService.deleteByEmailAndTime(email, time);
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미 저장된 요일입니다.");
+        }
         return new Response("성공", "요일 삭제 성공", null);
     }
 }
